@@ -1,0 +1,54 @@
+<script type="text/javascript">
+var timer = 0;
+var ratingsElements = document.getElementsByClassName("spr-badge");
+//console.log(ratingsElements);
+function runAfterElementExists(element,callback){
+  var checker = window.setInterval(function() {
+    timer += 10; //millisecs
+    //console.log("CHECKING " + timer);
+    if(timer > 5000){ //stop checking after 5 secs
+      console.log("took too long, exiting this process.");
+      clearInterval(checker);
+    }
+    if (element.length) {
+      console.log("got ratings from the products listed on this page, it took " + timer + " millisecs.");
+      clearInterval(checker);
+      callback();
+    }
+  }, 10);
+}
+runAfterElementExists(ratingsElements, function() {
+  var nonZeroRatings = [];
+  var sumRatings = 0;
+  for(var i = 0; i < ratingsElements.length ; i++){
+    var rating = ratingsElements[i].getAttribute("data-rating");
+    //console.log(rating);
+	if(rating != "0.0") {
+      nonZeroRatings.push(Number(rating));
+      sumRatings += Number(rating);
+    } 
+  }
+  console.log("ratings, for the products that have a rating:");
+  console.log(nonZeroRatings);
+  var avgRating = sumRatings/nonZeroRatings.length;
+  avgRating = avgRating.toString();
+  var numReviews = nonZeroRatings.length.toString();
+  console.log("average of product ratings:");
+  console.log(avgRating);
+  var el = document.createElement("script");
+  el.type = 'application/ld+json';
+  el.text = JSON.stringify({
+  "@context": "http://schema.org",
+  "@type": "Product",
+  "name": "Luxe Lens Lightroom Presets",
+  "url": "https://www.theluxelens.com/pages/lightroom-acr-presets",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": avgRating,
+    "reviewCount": numReviews
+   }
+   });
+  document.querySelector('body').appendChild(el);
+});
+</script>
+        
