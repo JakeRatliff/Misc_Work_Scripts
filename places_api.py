@@ -103,7 +103,6 @@ business_types = [
 total_results = []
 
 def get_nearby_places(coordinates, business_type, next_page):
-	nearby_places = []
 	URL = ('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='
 		+coordinates+'&radius=16093&key='+ api_key +'&type='
 		+business_type+'&pagetoken='+next_page)
@@ -116,15 +115,15 @@ def get_nearby_places(coordinates, business_type, next_page):
 		place_id = result['place_id']
 		website = get_place_website(place_id)
 		print([business_type, place_name, website])
-		nearby_places.append([business_type, place_name, website])
+		total_results.append([business_type, place_name, website])
 	try:
 		next_page_token = python_object["next_page_token"]
 	except KeyError:
 		#no next page
 		return
 	time.sleep(1)
-	total_results.append(nearby_places)
 	get_nearby_places(coordinates, business_type, next_page_token)
+
 
 def get_place_website(place_id):
 	reqURL = ('https://maps.googleapis.com/maps/api/place/details/json?placeid='
