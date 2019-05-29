@@ -12,7 +12,7 @@
         clearInterval(checker);
       }
       if (element != undefined) {
-        console.log("got ratings from the products listed on this page, it took " + timer + " millisecs.");
+        console.log("found element, it took " + timer + " millisecs.");
         clearInterval(checker);
         callback();
       }
